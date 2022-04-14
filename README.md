@@ -7,3 +7,5 @@ This is an API that helps to get info about the mempool of the specified bitcoin
   "bitcoind -regtest"
 - install all dependencies
   "pip3 install -r requirements.txt"
+- run
+"python3 manage.py runserver
