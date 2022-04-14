@@ -13,6 +13,7 @@ class GetTxDetails(APIView):
         rpc_pwd=request.data['rpc-pass']
         rpc_connection = AuthServiceProxy("http://%s:%s@localhost:18443"%(rpc_user, rpc_pwd))
         mempool_list = rpc_connection.getrawmempool()
+        # print(mempool_list)
         txid=request.data['txid']
         if txid in mempool_list:
             txinfo=rpc_connection.getmempoolentry(txid)
@@ -24,5 +25,6 @@ class GetTxDetails(APIView):
 ## restructure the code to take in the rpc user,rpc password and network type (mainnet,signet,testnet)
 class ListFeesView(APIView):
     def post(self,request):
+        pass
         
 
