@@ -5,4 +5,4 @@ from rest_framework import serializers
 class TxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['rpc-user','rpc-pass','txid']
+        fields = ['rpc-user','rpc-pass','txid','rpc-port']
