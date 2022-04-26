@@ -94,3 +94,36 @@ class GetMempoolLastTransaction(APIView):
                     "message": "Check your rpc username/password, and ensure bitcon core is running"
                 }
             )
+
+
+class BroadcastTransaction(APIView):
+    def post(self, request):
+        rpc_user = request.data["rpc_user"]
+        rpc_pwd = request.data["rpc_pwd"]
+        network = request.data["rpc_port"]
+        tx_hex = request.data["tx_hex"]
+        try:
+            rpc_connection = CheckNodeConnection(network, rpc_user, rpc_pwd)
+            try:
+                is_accepted = rpc_connection.testmempoolaccept([tx_hex])
+                if is_accepted[0]["allowed"] is True:
+                    try:
+                        txid = rpc_connection.sendrawtransaction(tx_hex)
+                        return Response(
+                            {
+                                "status": status.HTTP_302_FOUND,
+                                "transactionid": str(txid),
+                            }
+                        )
+                    except JSONRPCException as e:
+                        return Response({"message": str(e)})
+                else:
+                    return Response({"message": is_accepted[0]["reject-reason"]})
+            except JSONRPCException as e:
+                return Response({"message": str(e)})
+        except ConnectionRefusedError:
+            return Response(
+                {
+                    "message": "Check your rpc username/password, and ensure bitcon core is running"
+                }
+            )
